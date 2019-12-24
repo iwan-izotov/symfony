@@ -61,6 +61,4 @@ docker-php-ext-configure gd \
      mbstring \
   && docker-php-ext-configure zip --with-libzip \
   && docker-php-ext-install zip \
-  && pecl install xdebug-2.7.2 && docker-php-ext-enable xdebug \
-  && pecl install memcached-3.1.3 && docker-php-ext-enable memcached \
-  && yes '' | pecl install imagick-3.4.4 && docker-php-ext-enable imagick
+  && pecl install xdebug-2.7.2 && docker-php-ext-enable xdebug

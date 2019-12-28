@@ -14,8 +14,11 @@ namespace App\Repository;
 use App\Entity\Post;
 use App\Entity\Tag;
 use App\Pagination\Paginator;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+
+use function count;
 
 /**
  * This custom Doctrine repository contains some methods which are useful when
@@ -42,7 +45,7 @@ class PostRepository extends ServiceEntityRepository
             ->leftJoin('p.tags', 't')
             ->where('p.publishedAt <= :now')
             ->orderBy('p.publishedAt', 'DESC')
-            ->setParameter('now', new \DateTime())
+            ->setParameter('now', new DateTime())
         ;
 
         if (null !== $tag) {
@@ -60,7 +63,7 @@ class PostRepository extends ServiceEntityRepository
     {
         $searchTerms = $this->extractSearchTerms($query);
 
-        if (0 === \count($searchTerms)) {
+        if (0 === count($searchTerms)) {
             return [];
         }
 

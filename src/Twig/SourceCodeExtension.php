@@ -11,11 +11,21 @@
 
 namespace App\Twig;
 
+use Closure;
+use ReflectionFunction;
+use ReflectionFunctionAbstract;
+use ReflectionMethod;
+use ReflectionObject;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Template;
 use Twig\TemplateWrapper;
 use Twig\TwigFunction;
+
+use function array_slice;
+use function count;
+use function is_array;
+use function is_object;
 
 /**
  * CAUTION: this is an extremely advanced Twig extension. It's used to get the
@@ -63,7 +73,7 @@ class SourceCodeExtension extends AbstractExtension
         $method = $this->getCallableReflector($this->controller);
 
         $classCode = file($method->getFileName());
-        $methodCode = \array_slice($classCode, $method->getStartLine() - 1, $method->getEndLine() - $method->getStartLine() + 1);
+        $methodCode = array_slice($classCode, $method->getStartLine() - 1, $method->getEndLine() - $method->getStartLine() + 1);
         $controllerCode = '    '.$method->getDocComment()."\n".implode('', $methodCode);
 
         return [
@@ -78,19 +88,19 @@ class SourceCodeExtension extends AbstractExtension
      *
      * This logic is copied from Symfony\Component\HttpKernel\Controller\ControllerResolver::getArguments
      */
-    private function getCallableReflector(callable $callable): \ReflectionFunctionAbstract
+    private function getCallableReflector(callable $callable): ReflectionFunctionAbstract
     {
-        if (\is_array($callable)) {
-            return new \ReflectionMethod($callable[0], $callable[1]);
+        if (is_array($callable)) {
+            return new ReflectionMethod($callable[0], $callable[1]);
         }
 
-        if (\is_object($callable) && !$callable instanceof \Closure) {
-            $r = new \ReflectionObject($callable);
+        if (is_object($callable) && !$callable instanceof Closure) {
+            $r = new ReflectionObject($callable);
 
             return $r->getMethod('__invoke');
         }
 
-        return new \ReflectionFunction($callable);
+        return new ReflectionFunction($callable);
     }
 
     /**
@@ -124,7 +134,7 @@ class SourceCodeExtension extends AbstractExtension
             return '' === $lineOfCode || 0 === mb_strpos($lineOfCode, '    ');
         });
 
-        if (\count($indentedLines) === \count($codeLines)) {
+        if (count($indentedLines) === count($codeLines)) {
             $formattedCode = array_map(function ($lineOfCode) {
                 return mb_substr($lineOfCode, 4);
             }, $codeLines);

@@ -13,6 +13,7 @@ namespace App\Command;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Swift_Mailer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,7 +44,7 @@ class ListUsersCommand extends Command
     private $emailSender;
     private $users;
 
-    public function __construct(\Swift_Mailer $mailer, $emailSender, UserRepository $users)
+    public function __construct(Swift_Mailer $mailer, $emailSender, UserRepository $users)
     {
         parent::__construct();
 

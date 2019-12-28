@@ -13,6 +13,8 @@ namespace App\EventSubscriber;
 
 use App\Entity\Comment;
 use App\Events\CommentCreatedEvent;
+use Swift_Mailer;
+use Swift_Message;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -29,7 +31,7 @@ class CommentNotificationSubscriber implements EventSubscriberInterface
     private $urlGenerator;
     private $sender;
 
-    public function __construct(\Swift_Mailer $mailer, UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator, $sender)
+    public function __construct(Swift_Mailer $mailer, UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator, $sender)
     {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
@@ -64,7 +66,7 @@ class CommentNotificationSubscriber implements EventSubscriberInterface
         // Symfony uses a library called SwiftMailer to send emails. That's why
         // email messages are created instantiating a Swift_Message class.
         // See https://symfony.com/doc/current/email.html#sending-emails
-        $message = (new \Swift_Message())
+        $message = (new Swift_Message())
             ->setSubject($subject)
             ->setTo($post->getAuthor()->getEmail())
             ->setFrom($this->sender)

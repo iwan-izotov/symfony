@@ -16,6 +16,8 @@ use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+use function in_array;
+
 /**
  * It grants or denies permissions for actions related to blog posts (such as
  * showing, editing and deleting posts).
@@ -38,7 +40,7 @@ class PostVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         // this voter is only executed for three specific permissions on Post objects
-        return $subject instanceof Post && \in_array($attribute, [self::SHOW, self::EDIT, self::DELETE], true);
+        return $subject instanceof Post && in_array($attribute, [self::SHOW, self::EDIT, self::DELETE], true);
     }
 
     /**

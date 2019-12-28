@@ -12,6 +12,7 @@
 namespace App\Utils;
 
 use HtmlSanitizer\SanitizerInterface;
+use Parsedown;
 
 /**
  * This class is a light interface between an external Markdown parser library
@@ -28,7 +29,7 @@ class Markdown
 
     public function __construct(SanitizerInterface $sanitizer)
     {
-        $this->parser = new \Parsedown();
+        $this->parser = new Parsedown();
         $this->sanitizer = $sanitizer;
     }
 
